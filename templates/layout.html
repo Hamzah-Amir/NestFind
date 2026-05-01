@@ -13,15 +13,48 @@
 </head>
 <body>
     <header>
-        <nav>
-            <div class="logo">NestFind</div>
+        <nav class='bg-slate-800 flex justify-around items-center p-5 text-white'>
+            <div class="logo flex flex-row items-center">
+                <div class="logo-img mr-2">
+                    <img src="{% static 'img/logo.svg' %}" alt="NestFind Logo" class="w-8 h-8">
+                </div>
+                <div class="logo-text text-xl font-bold">NestFind</div>
+            </div>
+ 
             <div class="nav-links">
-                <ul>
-                    <li>Home</li>
-                    <li>Listings</li>
-                    <li>About</li>
-                    <li>Blog</li>
-                    <li>Help</li>
+                <ul class='flex space-x-4'>
+                    <li class='text-amber-300 cursor-pointer'>
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    
+                    <li class='cursor-pointer'>
+                        Listings
+                    </li>
+                    
+                    <li class='cursor-pointer'>
+                        About
+                    </li>
+                    
+                    <li class='cursor-pointer'>
+                        Blog
+                    </li>
+                    
+                    <li class='cursor-pointer'>
+                        Help
+                    </li>
+                    
+                </ul>
+            </div>
+            <div class="auth-links">
+                <ul class='flex space-x-4 items-center'>
+                    <li class='cursor-pointer'>
+                        Sign In
+                    </li>
+
+                    <li class='cursor-pointer border-2 border-orange-400 bg-orange-400 text-black rounded-md px-6 py-2'>
+                        Get Started
+                    </li>
+                    
                 </ul>
             </div>
         </nav>
