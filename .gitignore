@@ -32,6 +32,8 @@ env.bak/
 venv.bak/
 .venv/
 
+*.sqlite3
+
 # PyCharm / IDE
 .idea/
 *.iml
