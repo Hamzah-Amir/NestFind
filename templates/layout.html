@@ -5,9 +5,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{% block title %}{% endblock title %}</title>
+    {% load static %}
+    <link rel="stylesheet" href={% static "base.css" %}>
+    {% block extra_head %}{% endblock extra_head %}
     {% tailwind_css %}
 </head>
 <body>
+    <header>
+        <nav>
+            <div class="logo">NestFind</div>
+            <div class="nav-links">
+                <ul>
+                    <li>Home</li>
+                    <li>Listings</li>
+                    <li>About</li>
+                    <li>Blog</li>
+                    <li>Help</li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 </body>
 </html>
