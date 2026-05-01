@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'theme',
     'django_browser_reload',
     'core.apps.CoreConfig',
+    'listings',
+    'pages'
 ]
 
 MIDDLEWARE = [

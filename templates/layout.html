@@ -24,23 +24,23 @@
             <div class="nav-links">
                 <ul class='flex space-x-4'>
                     <li class='text-amber-300 cursor-pointer'>
-                        <a href="{% url 'home' %}">Home</a>
+                        <a href="{% url 'core:home' %}">Home</a>
                     </li>
                     
                     <li class='cursor-pointer'>
-                        Listings
+                        <a href="{% url 'listings:listing' %}">Listings</a>
                     </li>
                     
                     <li class='cursor-pointer'>
-                        About
+                        <a href="{% url 'pages:about' %}">About</a>
                     </li>
                     
                     <li class='cursor-pointer'>
-                        Blog
+                        <a href="{% url 'pages:blog' %}">Blog</a>
                     </li>
                     
                     <li class='cursor-pointer'>
-                        Help
+                        <a href="{% url 'pages:help' %}">Help</a>
                     </li>
                     
                 </ul>
