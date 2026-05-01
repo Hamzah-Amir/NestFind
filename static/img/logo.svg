@@ -1,0 +1,24 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Roof -->
+  <path d="M8 28 L32 10 L56 28"
+        stroke="#E0A84F"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- House body -->
+  <rect x="14" y="28" width="36" height="26" rx="4"
+        stroke="#E0A84F"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- Door -->
+  <rect x="28" y="40" width="8" height="14" rx="2"
+        stroke="#E0A84F"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"/>
+</svg>
