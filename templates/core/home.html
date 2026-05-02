@@ -7,95 +7,142 @@
 {% load static %}
 
 {% block body %}
-    <div class="section">
-        <div class="hero flex flex-row justify-center bg-[rgb(84,96,120)] mx-auto min-w-[90vw] h-[86.5vh]">
-            <div class='text-white flex flex-col gap-4 justify-center items-center h-[85vh]'>
-                <p class='font-serif text-6xl'>Find Your Perfect Home</p>
-                <p class='text-3xl'>Discover thousands of properties from trusted agents nationwide</p>
-                <form action="{% url "listings:listing" %}" method="get" class='flex w-[70vw] p-2 h-16 rounded-xl bg-white shadow-xl ring-1 ring-slate-200'>
-                    <div class='flex items-center gap-3 w-full h-full relative'>
-                        <div class='relative flex-1 min-w-0 h-full rounded-2xl bg-slate-100 text-slate-700'>
-                            <label class='flex items-center gap-3 px-4 h-full'>
-                                <img src="{% static 'img/icon-location.svg' %}" alt="Location" class="h-5 w-5" />
-                                <input type="text" name="location" id="locationInput" placeholder="Location" class="w-full bg-transparent outline-none placeholder:text-slate-400 text-slate-700" autocomplete="off" />
-                            </label>
-                            <div id="locationsDropdown" class='absolute left-0 top-full z-20 mt-2 w-full max-h-60 overflow-y-auto rounded-2xl bg-white shadow-xl border border-slate-200 hidden'>
-                                <div id="locationsList" class='p-2'></div>
-                            </div>
-                        </div>
-
-                        <div class='flex items-center gap-3 flex-[1.8] min-w-[280px] rounded-2xl bg-slate-100 px-4 text-slate-700 h-full'>
-                            <img src="{% static 'img/icon-price.svg' %}" alt="Price" class="h-5 w-5" />
-                            <div class='flex w-full gap-3'>
-                                <input name='min_price' type='number' placeholder='Min PKR' class='w-1/2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 outline-none focus:border-amber-300' />
-                                <input name='max_price' type='number' placeholder='Max PKR' class='w-1/2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 outline-none focus:border-amber-300' />
-                            </div>
-                        </div>
-
-                        <label class='flex items-center gap-3 flex-[1.1] min-w-0 rounded-2xl bg-slate-100 px-4 text-slate-700 h-full'>
-                            <img src="{% static 'img/icon-property.svg' %}" alt="Property Type" class="h-5 w-5" />
-                            <select name="property_type" class="w-full bg-transparent outline-none text-slate-700">
-                                <option value="">Property Type</option>
-                                <option value="house">House</option>
-                                <option value="apartment">Apartment</option>
-                                <option value="condo">Condo</option>
-                            </select>
-                        </label>
-
-                        <button type="submit" class='flex items-center justify-center gap-2 rounded-2xl bg-[rgb(201,169,110)] px-6 py-3 text-slate-950 font-semibold transition hover:bg-amber-400'>
-                            <img src="{% static 'img/icon-search.svg' %}" alt="Search" class='h-5 w-5' />
-                            Search
-                        </button>
+    <section class="section bg-slate-950 text-white">
+        <div class="mx-auto flex min-h-[80vh] max-w-7xl flex-col justify-center px-6 py-16 lg:px-12">
+            <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center rounded-full bg-amber-100/20 px-4 py-2 text-sm text-amber-200 ring-1 ring-amber-200/10">
+                        Trusted by verified buyers across Pakistan
                     </div>
-                </form>
-                <script>
-                    let locations = [];
-                    const locationInput = document.getElementById('locationInput');
-                    const locationsDropdown = document.getElementById('locationsDropdown');
-                    const locationsList = document.getElementById('locationsList');
 
-                    fetch("{% static 'json/locations.json' %}")
-                        .then(response => response.json())
-                        .then(data => {
-                            locations = data;
-                            renderLocations(locations);
-                        })
-                        .catch(() => {
-                            locations = ['Clifton', 'DHA', 'Gulshan-e-Iqbal', 'North Nazimabad'];
-                            renderLocations(locations);
-                        });
+                    <div class="space-y-6">
+                        <h1 class="max-w-3xl text-5xl font-semibold leading-tight tracking-tight sm:text-6xl">
+                            Find Your Perfect Home with NestFind
+                        </h1>
+                        <p class="max-w-2xl text-lg text-slate-300 sm:text-xl">
+                            Discover thousands of verified listings, licensed agents, and handpicked homes across Pakistan.
+                            Start searching with confidence and find the place your family will love.
+                        </p>
+                    </div>
 
-                    function renderLocations(list) {
-                        locationsList.innerHTML = '';
-                        list.forEach(location => {
-                            const div = document.createElement('div');
-                            div.className = 'px-3 py-2 hover:bg-slate-100 cursor-pointer text-slate-700';
-                            div.textContent = location;
-                            div.addEventListener('click', () => {
-                                locationInput.value = location;
-                                locationsDropdown.classList.add('hidden');
-                            });
-                            locationsList.appendChild(div);
-                        });
-                    }
+                    <form action="{% url 'listings:listing' %}" method="get" class="rounded-3xl bg-white/95 p-4 shadow-2xl ring-1 ring-slate-200/20 backdrop-blur-md">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <label class="relative flex flex-1 items-center gap-3 rounded-2xl bg-slate-100 px-4 py-3 text-slate-700 shadow-sm">
+                                <img src="{% static 'img/icon-location.svg' %}" alt="Location" class="h-5 w-5" />
+                                <input type="text" name="location" id="locationInput" placeholder="Location" class="w-full bg-transparent text-slate-700 outline-none placeholder:text-slate-400" autocomplete="off" />
+                                <div id="locationsDropdown" class="absolute left-0 top-full z-20 mt-2 w-full overflow-hidden rounded-2xl bg-white shadow-xl border border-slate-200 hidden">
+                                    <div id="locationsList" class="max-h-56 overflow-y-auto"></div>
+                                </div>
+                            </label>
 
-                    locationInput.addEventListener('focus', () => {
-                        locationsDropdown.classList.remove('hidden');
-                        renderLocations(locations);
-                    });
+                            <label class="flex flex-1 items-center gap-3 rounded-2xl bg-slate-100 px-4 py-3 text-slate-700 shadow-sm">
+                                <img src="{% static 'img/icon-price.svg' %}" alt="Price" class="h-5 w-5" />
+                                <input name="min_price" type="number" placeholder="Min PKR" class="w-1/2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 outline-none focus:border-amber-300" />
+                                <input name="max_price" type="number" placeholder="Max PKR" class="w-1/2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 outline-none focus:border-amber-300" />
+                            </label>
+                        </div>
 
-                    locationInput.addEventListener('input', (e) => {
-                        const query = e.target.value.toLowerCase();
-                        const filtered = locations.filter(loc => loc.toLowerCase().includes(query));
-                        renderLocations(filtered);
-                        locationsDropdown.classList.remove('hidden');
-                    });
+                        <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <label class="flex flex-1 items-center gap-3 rounded-2xl bg-slate-100 px-4 py-3 text-slate-700 shadow-sm">
+                                <img src="{% static 'img/icon-property.svg' %}" alt="Property Type" class="h-5 w-5" />
+                                <select name="property_type" class="w-full bg-transparent text-slate-700 outline-none">
+                                    <option value="">Property Type</option>
+                                    <option value="house">House</option>
+                                    <option value="apartment">Apartment</option>
+                                    <option value="condo">Condo</option>
+                                </select>
+                            </label>
 
-                    locationInput.addEventListener('blur', () => {
-                        setTimeout(() => locationsDropdown.classList.add('hidden'), 150);
-                    });
-                </script>
+                            <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-amber-300 px-8 py-3 text-base font-semibold text-slate-950 transition hover:bg-amber-400">
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="relative overflow-hidden rounded-[2rem] bg-[radial-gradient(circle_at_top,_rgb(249,168,38),_transparent_45%)] p-8 shadow-2xl ring-1 ring-white/10">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center opacity-20"></div>
+                    <div class="relative flex h-full flex-col justify-between gap-6 text-slate-950">
+                        <div class="rounded-3xl bg-white/90 p-6 shadow-xl ring-1 ring-slate-200/50">
+                            <h2 class="text-3xl font-bold">Ready to move?</h2>
+                            <p class="mt-3 text-sm text-slate-600">
+                                Browse trusted listings from Karachi to Peshawar and discover verified homes in minutes.
+                            </p>
+                        </div>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div class="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-slate-200/80">
+                                <p class="text-4xl font-semibold text-slate-900">12,000+</p>
+                                <p class="mt-2 text-sm text-slate-600">Verified listings across Pakistan</p>
+                            </div>
+                            <div class="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-slate-200/80">
+                                <p class="text-4xl font-semibold text-slate-900">40+</p>
+                                <p class="mt-2 text-sm text-slate-600">From Karachi to Peshawar</p>
+                            </div>
+                            <div class="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-slate-200/80">
+                                <p class="text-4xl font-semibold text-slate-900">2,400+</p>
+                                <p class="mt-2 text-sm text-slate-600">Licensed & verified</p>
+                            </div>
+                            <div class="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-slate-200/80">
+                                <p class="text-4xl font-semibold text-slate-900">85,000+</p>
+                                <p class="mt-2 text-sm text-slate-600">Families found their home</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <script>
+        let locations = [];
+        const locationInput = document.getElementById('locationInput');
+        const locationsDropdown = document.getElementById('locationsDropdown');
+        const locationsList = document.getElementById('locationsList');
+
+        fetch("{% static 'json/locations.json' %}")
+            .then(response => response.json())
+            .then(data => {
+                locations = data;
+                renderLocations(locations);
+            })
+            .catch(() => {
+                locations = ['Clifton', 'DHA', 'Gulshan-e-Iqbal', 'North Nazimabad'];
+                renderLocations(locations);
+            });
+
+        function renderLocations(list) {
+            if (!locationsList) return;
+            locationsList.innerHTML = '';
+            list.forEach(location => {
+                const div = document.createElement('div');
+                div.className = 'px-3 py-2 hover:bg-slate-100 cursor-pointer text-slate-700';
+                div.textContent = location;
+                div.addEventListener('click', () => {
+                    locationInput.value = location;
+                    locationsDropdown.classList.add('hidden');
+                });
+                locationsList.appendChild(div);
+            });
+        }
+
+        if (locationInput) {
+            locationInput.addEventListener('focus', () => {
+                if (locationsDropdown) locationsDropdown.classList.remove('hidden');
+                renderLocations(locations);
+            });
+
+            locationInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = locations.filter(loc => loc.toLowerCase().includes(query));
+                renderLocations(filtered);
+                if (locationsDropdown) locationsDropdown.classList.remove('hidden');
+            });
+
+            locationInput.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (locationsDropdown) locationsDropdown.classList.add('hidden');
+                }, 150);
+            });
+        }
+    </script>
 {% endblock body %}
