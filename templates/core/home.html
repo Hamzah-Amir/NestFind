@@ -13,7 +13,6 @@
                 <p class='font-serif text-6xl'>Find Your Perfect Home</p>
                 <p class='text-3xl'>Discover thousands of properties from trusted agents nationwide</p>
                 <form action="{% url "listings:listing" %}" method="get" class='flex w-[70vw] p-2 h-16 rounded-xl bg-white shadow-xl ring-1 ring-slate-200'>
-                    {% csrf_token %}
                     <div class='flex items-center gap-3 w-full h-full relative'>
                         <div class='relative flex-1 min-w-0 h-full rounded-2xl bg-slate-100 text-slate-700'>
                             <label class='flex items-center gap-3 px-4 h-full'>
