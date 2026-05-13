@@ -4,8 +4,7 @@ from listings.views import *
 app_name = "listings"
 
 urlpatterns = [
-    path("all/", listings, name="listing"),
-    path("<slug>/", listings, name="detail"),
+    path("all", listings, name="listing"),
     path("featured/", listings, name="slug"),
-    # path("featured/")
+    path("<slug:slug>/", listings, name="detail"),
 ]
