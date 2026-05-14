@@ -1,0 +1,334 @@
+{% extends "layout.html" %}
+{% block title %}Listings{% endblock title %}
+
+{% block extra_head %}{% endblock extra_head %}
+{% load static %}
+
+{% block body %}
+<section class="bg-slate-50 py-12">
+    <div class="mx-auto max-w-7xl px-6 sm:px-8">
+        <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+                <h1 class="text-3xl font-semibold text-slate-900">Available Properties</h1>
+                <p class="mt-2 text-sm text-slate-500">3 properties found</p>
+            </div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <label for="sort-by" class="sr-only">Sort by</label>
+                <div class="inline-flex items-center gap-3 rounded-3xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-200">
+                    <span class="text-sm font-medium text-slate-600">Sort by:</span>
+                    <select id="sort-by" class="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30">
+                        <option>Newest</option>
+                        <option>Price Low to High</option>
+                        <option>Price High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid gap-8 lg:grid-cols-[280px_1fr]">
+            <aside class="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-semibold text-slate-900">Filters</h2>
+                        <p class="mt-1 text-sm text-slate-500">Narrow results quickly.</p>
+                    </div>
+                    <button id="clear-filters" class="text-sm font-semibold text-amber-500 hover:text-amber-600">Clear</button>
+                </div>
+                cut
+                <div class="mt-6 space-y-5 text-sm text-slate-700">
+                    <div class="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs uppercase tracking-[0.24em] text-slate-500">Price Range</p>
+                            <span class="text-xs font-semibold text-slate-600">$<span id="price-range-value">100K</span></span>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-slate-600">
+                            <span class="w-12">$0</span>
+                            <input id="price-range" type="range" min="0" max="100" value="100" class="h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-amber-400" />
+                            <span class="w-16 text-right">$100K</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs uppercase tracking-[0.24em] text-slate-500">Location</p>
+                            <span class="text-xs text-slate-400">Type to search</span>
+                        </div>
+                        <div class="relative">
+                            <label for="location-search" class="sr-only">Search location</label>
+                            <input id="location-search" type="search" placeholder="Search location" autocomplete="off" class="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/20" />
+                            <div id="location-dropdown" class="absolute inset-x-0 top-full mt-2 hidden max-h-56 overflow-y-auto rounded-3xl border border-slate-200 bg-white shadow-xl">
+                                <ul id="location-list" class="divide-y divide-slate-100"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs uppercase tracking-[0.24em] text-slate-500">Bedrooms</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" data-value="1" class="bedroom-filter rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 transition hover:border-amber-400">1+</button>
+                            <button type="button" data-value="2" class="bedroom-filter rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 transition hover:border-amber-400">2+</button>
+                            <button type="button" data-value="3" class="bedroom-filter rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 transition hover:border-amber-400">3+</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4">
+                        <p class="text-xs uppercase tracking-[0.24em] text-slate-500">Property Type</p>
+                        <div class="space-y-2">
+                            <button type="button" data-value="House" class="prop-filter w-full rounded-2xl border border-slate-300 bg-white px-3 py-2 text-left text-sm text-slate-700 transition hover:border-amber-400">House</button>
+                            <button type="button" data-value="Apartment" class="prop-filter w-full rounded-2xl border border-slate-300 bg-white px-3 py-2 text-left text-sm text-slate-700 transition hover:border-amber-400">Apartment</button>
+                            <button type="button" data-value="Condo" class="prop-filter w-full rounded-2xl border border-slate-300 bg-white px-3 py-2 text-left text-sm text-slate-700 transition hover:border-amber-400">Condo</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <button id="apply-filters" class="w-full rounded-3xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Apply Filters</button>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="space-y-6">
+                <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    <article data-location="Clifton" data-bedrooms="3" data-property-type="House" data-price="485" class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="relative h-52 bg-slate-200">
+                            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.18),rgba(15,23,42,0.6))]"></div>
+                            <div class="absolute left-4 top-4 rounded-full bg-green-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">For Sale</div>
+                        </div>
+                        <div class="space-y-4 p-6">
+                            <div>
+                                <p class="text-2xl font-semibold text-slate-900">$485,000</p>
+                                <p class="mt-2 text-sm text-slate-500">123 Maple Street, San Francisco, CA</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+                                <span class="flex items-center gap-2"><span>🛏</span>3 Beds</span>
+                                <span class="flex items-center gap-2"><span>🛁</span>2 Baths</span>
+                                <span class="flex items-center gap-2"><span>📐</span>2,100 sqft</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-3 pt-3">
+                                <div class="flex items-center gap-3 text-sm text-slate-500">
+                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">S</span>
+                                    <span>Sarah Johnson</span>
+                                </div>
+                                <button class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article data-location="North Nazimabad" data-bedrooms="4" data-property-type="Apartment" data-price="725" class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="relative h-52 bg-slate-200">
+                            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.18),rgba(15,23,42,0.6))]"></div>
+                            <div class="absolute left-4 top-4 rounded-full bg-teal-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">New</div>
+                        </div>
+                        <div class="space-y-4 p-6">
+                            <div>
+                                <p class="text-2xl font-semibold text-slate-900">$725,000</p>
+                                <p class="mt-2 text-sm text-slate-500">456 Oak Avenue, Los Angeles, CA</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+                                <span class="flex items-center gap-2"><span>🛏</span>4 Beds</span>
+                                <span class="flex items-center gap-2"><span>🛁</span>3 Baths</span>
+                                <span class="flex items-center gap-2"><span>📐</span>2,800 sqft</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-3 pt-3">
+                                <div class="flex items-center gap-3 text-sm text-slate-500">
+                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">M</span>
+                                    <span>Michael Chen</span>
+                                </div>
+                                <button class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article data-location="DHA" data-bedrooms="2" data-property-type="Condo" data-price="320" class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="relative h-52 bg-slate-200">
+                            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.18),rgba(15,23,42,0.6))]"></div>
+                            <div class="absolute left-4 top-4 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">For Rent</div>
+                        </div>
+                        <div class="space-y-4 p-6">
+                            <div>
+                                <p class="text-2xl font-semibold text-slate-900">$3,200/mo</p>
+                                <p class="mt-2 text-sm text-slate-500">789 Pine Road, Seattle, WA</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+                                <span class="flex items-center gap-2"><span>🛏</span>2 Beds</span>
+                                <span class="flex items-center gap-2"><span>🛁</span>2 Baths</span>
+                                <span class="flex items-center gap-2"><span>📐</span>1,500 sqft</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-3 pt-3">
+                                <div class="flex items-center gap-3 text-sm text-slate-500">
+                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">E</span>
+                                    <span>Emily Rodriguez</span>
+                                </div>
+                                <button class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const locationSearch = document.getElementById('location-search');
+        const locationDropdown = document.getElementById('location-dropdown');
+        const locationList = document.getElementById('location-list');
+        const clearFilters = document.getElementById('clear-filters');
+        const applyFilters = document.getElementById('apply-filters');
+        const priceRange = document.getElementById('price-range');
+        const priceRangeValue = document.getElementById('price-range-value');
+        const bedroomButtons = Array.from(document.querySelectorAll('.bedroom-filter'));
+        const propButtons = Array.from(document.querySelectorAll('.prop-filter'));
+        const cards = Array.from(document.querySelectorAll('article[data-location]'));
+        let locations = [];
+
+        const state = {
+            maxPrice: 100,
+            location: '',
+            bedrooms: null,
+            propertyType: null,
+        };
+
+        function renderLocations(filteredLocations) {
+            if (!filteredLocations.length) {
+                locationList.innerHTML = '<li class="px-4 py-3 text-sm text-slate-500">No locations found.</li>';
+                return;
+            }
+            locationList.innerHTML = filteredLocations.map(location => `
+                <li class="cursor-pointer px-4 py-3 text-sm text-slate-700 transition hover:bg-slate-100" data-location="${location}">${location}</li>
+            `).join('');
+            locationList.querySelectorAll('li').forEach(item => {
+                item.addEventListener('click', () => {
+                    locationSearch.value = item.dataset.location;
+                    state.location = item.dataset.location.toLowerCase();
+                    filterLocations();
+                    hideDropdown();
+                });
+            });
+        }
+
+        function filterLocations() {
+            const query = locationSearch.value.trim().toLowerCase();
+            state.location = query;
+            const filtered = locations.filter(name => name.toLowerCase().includes(query));
+            renderLocations(filtered);
+            if (query.length) {
+                showDropdown();
+            }
+        }
+
+        function showDropdown() {
+            locationDropdown.classList.remove('hidden');
+        }
+
+        function hideDropdown() {
+            locationDropdown.classList.add('hidden');
+        }
+
+        function updateSliderLabel(value) {
+            priceRangeValue.textContent = `${value}K`;
+            state.maxPrice = Number(value);
+        }
+
+        function toggleButtonGroup(button, group) {
+            group.forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white', 'border-amber-500');
+                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
+            });
+            button.classList.add('bg-slate-900', 'text-white', 'border-amber-500');
+            button.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+        }
+
+        function applyFilterState() {
+            cards.forEach(card => {
+                const cardPrice = Number(card.dataset.price);
+                const cardLocation = card.dataset.location.toLowerCase();
+                const cardBedrooms = Number(card.dataset.bedrooms);
+                const cardType = card.dataset.propertyType;
+                const priceMatch = cardPrice <= state.maxPrice * 10;
+                const locationMatch = !state.location || cardLocation.includes(state.location);
+                const bedroomsMatch = !state.bedrooms || cardBedrooms >= state.bedrooms;
+                const typeMatch = !state.propertyType || cardType === state.propertyType;
+                const visible = priceMatch && locationMatch && bedroomsMatch && typeMatch;
+                card.style.display = visible ? '' : 'none';
+            });
+            const visibleCount = cards.filter(card => card.style.display !== 'none').length;
+            document.querySelector('p.mt-2.text-sm.text-slate-500').textContent = `${visibleCount} properties found`;
+        }
+
+        function resetFilters() {
+            state.maxPrice = 100;
+            state.location = '';
+            state.bedrooms = null;
+            state.propertyType = null;
+            priceRange.value = 100;
+            updateSliderLabel(100);
+            locationSearch.value = '';
+            bedroomButtons.forEach(button => {
+                button.classList.remove('bg-slate-900', 'text-white', 'border-amber-500');
+                button.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
+            });
+            propButtons.forEach(button => {
+                button.classList.remove('bg-slate-900', 'text-white', 'border-amber-500');
+                button.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
+            });
+            hideDropdown();
+            applyFilterState();
+        }
+
+        fetch('{% static "json/locations.json" %}')
+            .then(response => response.json())
+            .then(data => {
+                locations = data;
+            })
+            .catch(() => {
+                locationList.innerHTML = '<li class="px-4 py-3 text-sm text-red-500">Unable to load locations.</li>';
+                showDropdown();
+            });
+
+        locationSearch.addEventListener('focus', () => {
+            if (locations.length) {
+                renderLocations(locations);
+                showDropdown();
+            }
+        });
+
+        locationSearch.addEventListener('input', filterLocations);
+        locationSearch.addEventListener('blur', () => {
+            setTimeout(hideDropdown, 200);
+        });
+
+        priceRange.addEventListener('input', event => {
+            updateSliderLabel(event.target.value);
+        });
+
+        bedroomButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                state.bedrooms = Number(button.dataset.value);
+                toggleButtonGroup(button, bedroomButtons);
+            });
+        });
+
+        propButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                state.propertyType = button.dataset.value;
+                toggleButtonGroup(button, propButtons);
+            });
+        });
+
+        applyFilters.addEventListener('click', event => {
+            event.preventDefault();
+            applyFilterState();
+        });
+
+        clearFilters.addEventListener('click', event => {
+            event.preventDefault();
+            resetFilters();
+        });
+
+        applyFilterState();
+    });
+</script>
+{% endblock body %}

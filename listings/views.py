@@ -9,4 +9,13 @@ def listings(request):
         max_price = request.GET.get('max_price', 0)
         location = request.GET.get('location', '')
         property_type = request.GET.get('property_type', '')
-    return HttpResponse("<h1>This is listing page</h1>")
+        filter = {}
+        if min_price:
+            filter['price__gte'] = min_price
+        if max_price:
+            filter['price__lte'] = max_price
+        if location:
+            filter['location'] = location
+        if property_type:
+            filter['property_type'] = property_type
+        return render(request, "listings/listing.html", {'filter': filter})
