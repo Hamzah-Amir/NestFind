@@ -107,3 +107,11 @@ class Listing(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+class ListingImage(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='listing_images/')
+    caption = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.listing.title}"
