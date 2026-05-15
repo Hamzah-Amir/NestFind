@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from .models import Listing
 
 # Create your views here.
 
@@ -15,7 +16,9 @@ def listings(request):
         if max_price:
             filter['price__lte'] = max_price
         if location:
-            filter['location'] = location
+            filter['area'] = location
         if property_type:
             filter['property_type'] = property_type
-        return render(request, "listings/listing.html", {'filter': filter})
+        # Filtering listings based on the provided criteria
+        listings = Listing.objects.filter(**filter)
+        return render(request, "listings/listing.html", {'listings': listings})
