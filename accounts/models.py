@@ -34,6 +34,8 @@ class CustomUser(AbstractUser):
 
     # Common fields for both roles
     email = models.EmailField(unique=True, null=False, blank=False)
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    last_name = models.CharField(max_length=30, blank=True, null=True)
     username = None
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
