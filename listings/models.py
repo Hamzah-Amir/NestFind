@@ -90,16 +90,15 @@ class Listing(models.Model):
 
 
     def save(self, *args, **kwargs):
-        # Auto generate slug from title
+        # Auto-generate a slug from the title if missing
         if not self.slug:
             base_slug = slugify(self.title)
-            unique_slug = f"{base_slug}-{uuid.uuid4().hex[:8]}"
-            slug = unique_slug
+            slug = base_slug
             counter = 1
             while Listing.objects.filter(slug=slug).exists():
-                slug = f"{unique_slug}-{counter}"
+                slug = f"{base_slug}-{counter}"
                 counter += 1
-                self.slug = slug
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
