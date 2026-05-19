@@ -22,3 +22,8 @@ def listings(request):
         # Filtering listings based on the provided criteria
         listings = Listing.objects.filter(**filter)
         return render(request, "listings/listing.html", {'listings': listings})
+
+def detail(request, slug):
+    if request.method == "GET":
+        listing = Listing.objects.get(slug=slug)
+        return render(request, "listings/detail.html", {'listing': listing})

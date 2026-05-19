@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}{{ listing.title }}{% endblock title %}
+{% comment %} {% block extra_head %}{% endblock extra_head %} {% endcomment %}
+{% load static %}
+{% block body %}
+<h1>{{ listing.title }}</h1>
+{% endblock body %}
