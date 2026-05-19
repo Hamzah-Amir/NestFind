@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-
+        {% comment %} Side bar {% endcomment %}
         <div class="grid gap-8 lg:grid-cols-[280px_1fr]">
             <aside class="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-200">
                 <div class="flex items-center justify-between">
@@ -42,12 +42,12 @@
                             <span class="text-xs font-semibold text-slate-600">$<span id="price-range-value">100K</span></span>
                         </div>
                         <div class="flex items-center gap-4 text-sm text-slate-600">
-                            <span class="w-12">$0</span>
+                            <span class="w-12">PKR0</span>
                             <input id="price-range" type="range" min="0" max="100" value="100" class="h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-amber-400" />
-                            <span class="w-16 text-right">$100K</span>
+                            <span class="w-16 text-right">PKR10000K</span>
                         </div>
                     </div>
-
+                    
                     <div class="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4">
                         <div class="flex items-center justify-between">
                             <p class="text-xs uppercase tracking-[0.24em] text-slate-500">Location</p>
@@ -90,80 +90,42 @@
 
             <div class="space-y-6">
                 <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                    <article data-location="Clifton" data-bedrooms="3" data-property-type="House" data-price="485" class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
-                        <div class="relative h-52 bg-slate-200">
-                            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.18),rgba(15,23,42,0.6))]"></div>
-                            <div class="absolute left-4 top-4 rounded-full bg-green-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">For Sale</div>
-                        </div>
-                        <div class="space-y-4 p-6">
-                            <div>
-                                <p class="text-2xl font-semibold text-slate-900">$485,000</p>
-                                <p class="mt-2 text-sm text-slate-500">123 Maple Street, San Francisco, CA</p>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                <span class="flex items-center gap-2"><span>🛏</span>3 Beds</span>
-                                <span class="flex items-center gap-2"><span>🛁</span>2 Baths</span>
-                                <span class="flex items-center gap-2"><span>📐</span>2,100 sqft</span>
-                            </div>
-                            <div class="flex items-center justify-between gap-3 pt-3">
-                                <div class="flex items-center gap-3 text-sm text-slate-500">
-                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">S</span>
-                                    <span>Sarah Johnson</span>
-                                </div>
-                                <button class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
-                            </div>
-                        </div>
-                    </article>
-
+                {% comment %} Listings {% endcomment %}
+                    {% for listing in listings %}
                     <article data-location="North Nazimabad" data-bedrooms="4" data-property-type="Apartment" data-price="725" class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
-                        <div class="relative h-52 bg-slate-200">
+                        <div class="relative h-52 overflow-hidden bg-slate-200">
+                            {% if listing.images.first %}
+                                <img src="{{ listing.images.first.image.url }}" alt="{{ listing.title }}" class="absolute inset-0 h-full w-full object-cover" />
+                            {% endif %}
                             <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.18),rgba(15,23,42,0.6))]"></div>
-                            <div class="absolute left-4 top-4 rounded-full bg-teal-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">New</div>
+                            <div class="absolute left-4 top-4 rounded-full bg-teal-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">{{ listing.get_property_type_display }}</div>
                         </div>
                         <div class="space-y-4 p-6">
                             <div>
-                                <p class="text-2xl font-semibold text-slate-900">$725,000</p>
+                                <p class="text-2xl font-semibold text-slate-900">PKR, {{ listing.price|floatformat:0}}</p>
                                 <p class="mt-2 text-sm text-slate-500">456 Oak Avenue, Los Angeles, CA</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                <span class="flex items-center gap-2"><span>🛏</span>4 Beds</span>
-                                <span class="flex items-center gap-2"><span>🛁</span>3 Baths</span>
-                                <span class="flex items-center gap-2"><span>📐</span>2,800 sqft</span>
+                                <span class="flex items-center gap-2"><span>🛏</span>{{ listing.bedrooms }} Beds</span>
+                                <span class="flex items-center gap-2"><span>🛁</span>{{ listing.bathrooms }} Baths</span>
+                                <span class="flex items-center gap-2"><span>📐</span>{{ listing.area_size|floatformat:0 }} {{ listing.area_unit }}</span>
                             </div>
                             <div class="flex items-center justify-between gap-3 pt-3">
                                 <div class="flex items-center gap-3 text-sm text-slate-500">
-                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">M</span>
-                                    <span>Michael Chen</span>
+                                    <span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 text-slate-700">
+                                    {% if listing.agent.avatar %}
+                                        <img src="{{ listing.agent.avatar.url }}" alt="{{ listing.agent.get_full_name|default:listing.agent.email }}" class="h-full w-full object-cover" />
+                                    {% else %}
+                                        <span class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">N/A</span>
+                                    {% endif %}
+                                </span>
+                                    <span>{{ listing.agent.get_full_name|default:listing.agent.email }}</span>
                                 </div>
                                 <button class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
                             </div>
                         </div>
                     </article>
-
-                    <article data-location="DHA" data-bedrooms="2" data-property-type="Condo" data-price="320" class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
-                        <div class="relative h-52 bg-slate-200">
-                            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.18),rgba(15,23,42,0.6))]"></div>
-                            <div class="absolute left-4 top-4 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">For Rent</div>
-                        </div>
-                        <div class="space-y-4 p-6">
-                            <div>
-                                <p class="text-2xl font-semibold text-slate-900">$3,200/mo</p>
-                                <p class="mt-2 text-sm text-slate-500">789 Pine Road, Seattle, WA</p>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                <span class="flex items-center gap-2"><span>🛏</span>2 Beds</span>
-                                <span class="flex items-center gap-2"><span>🛁</span>2 Baths</span>
-                                <span class="flex items-center gap-2"><span>📐</span>1,500 sqft</span>
-                            </div>
-                            <div class="flex items-center justify-between gap-3 pt-3">
-                                <div class="flex items-center gap-3 text-sm text-slate-500">
-                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">E</span>
-                                    <span>Emily Rodriguez</span>
-                                </div>
-                                <button class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
-                            </div>
-                        </div>
-                    </article>
+                    {% endfor %}
                 </div>
             </div>
         </div>
