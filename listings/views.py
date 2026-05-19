@@ -21,5 +21,4 @@ def listings(request):
             filter['property_type'] = property_type
         # Filtering listings based on the provided criteria
         listings = Listing.objects.filter(**filter)
-        print("title",listings[0].title)
         return render(request, "listings/listing.html", {'listings': listings})

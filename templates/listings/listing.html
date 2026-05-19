@@ -121,7 +121,11 @@
                                 </span>
                                     <span>{{ listing.agent.get_full_name|default:listing.agent.email }}</span>
                                 </div>
-                                <button class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
+                                {% if listing.slug %}
+                                <a href="{% url 'listings:detail' listing.slug %}">
+                                    <button type='submit' class="rounded-2xl cursor-pointer bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
+                                </a>
+                                {% endif %}
                             </div>
                         </div>
                     </article>
