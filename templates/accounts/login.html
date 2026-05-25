@@ -48,6 +48,14 @@
                 </div>
 
                 <form action="{% url 'accounts:login' %}" method="post" class="space-y-5" id="login-form">
+                    {% comment %} Display error message if login fails {% endcomment %}
+{% if error %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Error! </strong>
+        <span class="block sm:inline">{{ error }}</span>
+    </div>
+{% endif %}
+                    
                     {% csrf_token %}
                     <div>
                         <label for="email" class="block text-sm font-semibold text-slate-700">Email</label>
@@ -63,7 +71,8 @@
                             <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" class="w-full border-0 bg-transparent text-slate-900 outline-none" required>
                         </div>
                     </div>
-                    <button type="submit" class="w-full rounded-3xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Sign In</button>
+                    {% comment %} Making submit button submit form {% endcomment %}
+                        <button type="submit" id="login-button" class="flex w-full items-center justify-center rounded-3xl bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-amber-400">Sign In</button>
                 </form>
 
                 <div class="my-6 flex items-center gap-3 text-xs uppercase tracking-[0.24em] text-slate-400">
@@ -95,12 +104,14 @@
             registerTab.classList.remove('bg-slate-950', 'text-white');
             registerTab.classList.add('bg-white', 'text-slate-700');
         });
-
-        loginForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            console.log('Sign in submitted');
-            // Add login submit logic here
-        });
     });
+
+    const loginButton = document.getElementById('login-button');
+    loginButton.addEventListener('click', function (event) {
+        loginButton.disabled = true;
+        document.getElementById('login-form').submit();
+
+            loginButton.innerHTML = `<span class="animate-spin h-5 inline-block border-4 w-5 text-white rounded-full border-t-slate-800"></span>`
+    })
 </script>
 {% endblock body %}
