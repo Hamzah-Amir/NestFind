@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock title %}
+{% load static %}
+
+{% block body %}
+<div class="flex w-screen h-screen ">
+<aside class="sidebar w-1/5 bg-amber-500">
+    {% include "buyer/components/sidebar.html" %}
+</aside>
+<main class="main-content w-1/2">
+    <h1>Dashboard</h1>
+    <p>Welcome to your dashboard! Here you can manage your profile, view your saved properties, and track your inquiries.</p>
+</div>
+{% endblock body %}

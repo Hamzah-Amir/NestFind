@@ -1,0 +1,221 @@
+{% load static %}
+
+<style>
+  .sidebar-wrap {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .sidebar {
+    width: 240px;
+    background: #1B2B4B;
+    padding: 0 0 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    margin-bottom: 0.5rem;
+  }
+  .sidebar-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(201,169,110,0.18);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #C9A96E;
+    font-size: 16px;
+  }
+  .sidebar-logo-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: white;
+  }
+  .sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .sidebar-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #C9A96E;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .sidebar-user-info { flex: 1; min-width: 0; }
+  .sidebar-user-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar-user-role {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1px;
+  }
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.75rem 1.25rem 0.35rem;
+  }
+  .sidebar-nav { list-style: none; padding: 0 0.75rem; margin: 0; }
+  .sidebar-nav li { margin-bottom: 2px; }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+  }
+  .sidebar-nav a:hover {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.85);
+  }
+  .sidebar-nav a.active {
+    background: rgba(201,169,110,0.12);
+    color: white;
+    border-left: 2.5px solid #C9A96E;
+    padding-left: calc(12px - 2.5px);
+  }
+  .sidebar-nav a.active i { color: #C9A96E; }
+  .sidebar-nav i {
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .sidebar-nav .badge {
+    margin-left: auto;
+    background: #E24B4A;
+    color: white;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 6px;
+    border-radius: 20px;
+    min-width: 18px;
+    text-align: center;
+  }
+  .sidebar-divider {
+    border: none;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    margin: 0.75rem 1.25rem;
+  }
+  .sidebar-signout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .sidebar-signout:hover { color: #E24B4A; }
+  .sidebar-signout i { font-size: 17px; }
+</style>
+
+<div class="sidebar-wrap">
+  <div class="sidebar">
+
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><img src="{% static 'img/logo.svg' %}" alt="NestFind Logo"></img></div>
+      <span class="sidebar-logo-text">NestFind</span>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">HA</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">Hamza Amir</div>
+        <div class="sidebar-user-role">Buyer Account</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Main</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#" class="active">
+          <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="ti ti-heart" aria-hidden="true"></i>
+          Saved Listings
+          <span class="badge">4</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="ti ti-message" aria-hidden="true"></i>
+          Inquiry History
+          <span class="badge">2</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="ti ti-arrows-diff" aria-hidden="true"></i>
+          Compare Tool
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-section-label">Account</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#">
+          <i class="ti ti-user" aria-hidden="true"></i>
+          My Profile
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          Notifications
+          <span class="badge">1</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="ti ti-settings" aria-hidden="true"></i>
+          Settings
+        </a>
+      </li>
+    </ul>
+
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-signout">
+      <i class="ti ti-logout" aria-hidden="true"></i>
+      Sign Out
+    </div>
+
+  </div>
+</div>

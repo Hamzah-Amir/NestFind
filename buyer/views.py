@@ -1,3 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+@login_required(login_url='login')
+def dashboard(request):
+    return render(request, 'buyer/dashboard.html')
+
+
+@login_required(login_url='login')
+def favorites(request):
+    pass
+
+@login_required(login_url='login')
+def messages(request):
+    pass
+
+@login_required(login_url='login')
+def conversation_detail(request, conversation_id):
+    pass
+
+@login_required(login_url='login')
+def compare(request):
+    pass
+
+@login_required(login_url='login')
+def profile(request):
+    pass
