@@ -16,7 +16,7 @@ def favorites(request):
 
 @login_required(login_url='login')
 def messages(request):
-    pass
+    return render(request, 'buyer/messages.html')
 
 @login_required(login_url='login')
 def conversation_detail(request, conversation_id):
