@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
+from .models import Favorite
 # Create your views here.
 
 @login_required(login_url='login')
@@ -10,7 +10,9 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def favorites(request):
-    pass
+    favorite_listings = Favorite.objects.filter(user=request.user).select_related('listing')
+    print(favorite_listings[0].user.first_name)
+    return render(request, 'buyer/favorites.html', {'listings': favorite_listings})
 
 @login_required(login_url='login')
 def messages(request):
