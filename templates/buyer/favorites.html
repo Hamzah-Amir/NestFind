@@ -6,49 +6,55 @@
     <aside class="sidebar w-1/5">
         {% include "buyer/components/sidebar.html" %}
     </aside>
-    <section class="p-4">
-        <h1 class='text-4xl'>Saved Listings</h1>
-        <p class='text-lg'>Welcome back, Hamza Amir</p>
-        <div class="p-6">
-            {% for listing in listings %}
-                    <article data-location="North Nazimabad" data-bedrooms="4" data-property-type="Apartment" data-price="725" class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
-                        <div class="relative h-52 w-80 overflow-hidden bg-slate-200">
-                            {% if listing.listing.images.first %}
-                                <img src="{{ listing.listing.images.first.image.url }}" alt="{{ listing.listing.title }}" class="absolute inset-0 h-full w-full object-cover" />
+    <section class="p-8 bg-amber-50 w-full">
+        <h1 class='text-3xl font-semibold text-slate-900 mb-1'>Saved Listings</h1>
+        <p class='text-sm text-slate-500 mb-8'>Welcome back, {{ request.user.get_full_name|default:request.user.email }}</p>
+        <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {% for favorite in favorites %}
+                    <article class="group overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="relative h-52 w-full overflow-hidden bg-slate-200">
+                            {% if favorite.listing.images.first %}
+                                <img src="{{ favorite.listing.images.first.image.url }}" alt="{{ favorite.listing.title }}" class="absolute inset-0 h-full w-full object-cover" />
                             {% endif %}
                             <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.18),rgba(15,23,42,0.6))]"></div>
-                            <div class="absolute left-4 top-4 rounded-full bg-teal-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">{{ listing.listing.get_property_type_display }}</div>
+                            <div class="absolute left-4 top-4 rounded-full bg-teal-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-lg">{{ favorite.listing.get_property_type_display }}</div>
                         </div>
                         <div class="space-y-4 p-6">
                             <div>
-                                <p class="text-2xl font-semibold text-slate-900">PKR, {{ listing.listing.price|floatformat:0}}</p>
-                                <p class="mt-2 text-sm text-slate-500">456 Oak Avenue, Los Angeles, CA</p>
+                                <p class="text-2xl font-semibold text-slate-900">PKR {{ favorite.listing.price|floatformat:0}}</p>
+                                <p class="mt-1 text-base font-medium text-slate-700">{{ favorite.listing.title }}</p>
+                                <p class="mt-2 text-sm text-slate-500">{{ favorite.listing.area }}, {{ favorite.listing.city }}</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                <span class="flex items-center gap-2"><span>🛏</span>{{ listing.listing.bedrooms }} Beds</span>
-                                <span class="flex items-center gap-2"><span>🛁</span>{{ listing.listing.bathrooms }} Baths</span>
-                                <span class="flex items-center gap-2"><span>📐</span>{{ listing.listing.area_size|floatformat:0 }} {{ listing.listing.area_unit }}</span>
+                                <span class="flex items-center gap-2"><span>🛏</span>{{ favorite.listing.bedrooms|default:'—' }} Beds</span>
+                                <span class="flex items-center gap-2"><span>🛁</span>{{ favorite.listing.bathrooms|default:'—' }} Baths</span>
+                                <span class="flex items-center gap-2"><span>📐</span>{{ favorite.listing.area_size|floatformat:0 }} {{ favorite.listing.area_unit }}</span>
                             </div>
                             <div class="flex items-center justify-between gap-3 pt-3">
                                 <div class="flex items-center gap-3 text-sm text-slate-500">
                                     <span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 text-slate-700">
-                                    {% if listing.user.avatar %}
-                                        <img src="{{ listing.user.avatar.url }}" alt="{{ listing.user.get_full_name|default:listing.user.email }}" class="h-full w-full object-cover" />
+                                    {% if favorite.listing.agent.avatar %}
+                                        <img src="{{ favorite.listing.agent.avatar.url }}" alt="{{ favorite.listing.agent.get_full_name|default:favorite.listing.agent.email }}" class="h-full w-full object-cover" />
                                     {% else %}
                                         <span class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">N/A</span>
                                     {% endif %}
                                 </span>
-                                    <span>{{ listing.user.first_name }} {{ listing.user.last_name }}</span>
+                                    <span>{{ favorite.listing.agent.get_full_name|default:favorite.listing.agent.email }}</span>
                                 </div>
-                                {% if listing.slug %}
-                                <a href="{% url 'listings:detail' listing.slug %}">
-                                    <button type='submit' class="rounded-2xl cursor-pointer bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
+                                <a href="{% url 'listings:detail' favorite.listing.slug %}">
+                                    <button type='button' class="rounded-2xl cursor-pointer bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">View Details</button>
                                 </a>
-                                {% endif %}
                             </div>
                         </div>
                     </article>
-                    {% endfor %}
+            {% empty %}
+                    <div class="col-span-full rounded-[2rem] bg-white p-12 text-center shadow-sm ring-1 ring-slate-200">
+                        <p class="text-5xl">💔</p>
+                        <h2 class="mt-4 text-lg font-semibold text-slate-900">No saved listings yet</h2>
+                        <p class="mt-1 text-sm text-slate-500">Browse properties and tap the heart to save them here.</p>
+                        <a href="{% url 'listings:listing' %}" class="mt-6 inline-flex items-center justify-center rounded-2xl bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-300">Browse Listings</a>
+                    </div>
+            {% endfor %}
         </div>
     </section>
 </div>

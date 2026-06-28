@@ -4,12 +4,90 @@
 {% load static %}
 
 {% block body %}
-<div class="flex w-screen h-screen ">
-<aside class="sidebar w-1/5 bg-amber-500">
-    {% include "buyer/components/sidebar.html" %}
-</aside>
-<main class="main-content w-1/2">
-    <h1>Dashboard</h1>
-    <p>Welcome to your dashboard! Here you can manage your profile, view your saved properties, and track your inquiries.</p>
+<div class="flex w-full min-h-screen">
+    <aside class="sidebar w-1/5">
+        {% include "buyer/components/sidebar.html" %}
+    </aside>
+
+    <section class="p-8 bg-amber-50 w-full">
+        <!-- Page Header -->
+        <h1 class="text-3xl font-semibold text-slate-900 mb-1">Dashboard</h1>
+        <p class="text-sm text-slate-500 mb-8">Welcome back, {{ request.user.get_full_name|default:request.user.email }}</p>
+
+        <!-- Stat Cards -->
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+            <a href="{% url 'buyer:favorites' %}" class="rounded-[1.5rem] bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-500">Saved Listings</span>
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-50 text-rose-500">❤</span>
+                </div>
+                <p class="mt-4 text-4xl font-semibold text-slate-900">{{ favorites_count }}</p>
+            </a>
+            <a href="{% url 'buyer:messages' %}" class="rounded-[1.5rem] bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-500">Inquiries Sent</span>
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-500">✉</span>
+                </div>
+                <p class="mt-4 text-4xl font-semibold text-slate-900">{{ inquiries_count }}</p>
+            </a>
+            <div class="rounded-[1.5rem] bg-white p-6 shadow-sm ring-1 ring-slate-200">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-500">Pending Replies</span>
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">⏳</span>
+                </div>
+                <p class="mt-4 text-4xl font-semibold text-slate-900">{{ pending_count }}</p>
+            </div>
+        </div>
+
+        <!-- Recent activity -->
+        <div class="grid gap-6 lg:grid-cols-2">
+            <!-- Recent saved -->
+            <div class="rounded-[1.5rem] bg-white p-6 shadow-sm ring-1 ring-slate-200">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-slate-900">Recently Saved</h2>
+                    <a href="{% url 'buyer:favorites' %}" class="text-sm font-semibold text-amber-600 hover:text-amber-500">View all</a>
+                </div>
+                {% for fav in recent_favorites %}
+                    <a href="{% url 'listings:detail' fav.listing.slug %}" class="flex items-center gap-4 rounded-2xl p-3 transition hover:bg-slate-50">
+                        <span class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl bg-slate-200">
+                            {% if fav.listing.images.first %}
+                                <img src="{{ fav.listing.images.first.image.url }}" alt="{{ fav.listing.title }}" class="h-full w-full object-cover" />
+                            {% endif %}
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-medium text-slate-900">{{ fav.listing.title }}</p>
+                            <p class="text-sm text-slate-500">PKR {{ fav.listing.price|floatformat:0 }}</p>
+                        </div>
+                    </a>
+                {% empty %}
+                    <p class="py-6 text-center text-sm text-slate-400">No saved listings yet.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Recent inquiries -->
+            <div class="rounded-[1.5rem] bg-white p-6 shadow-sm ring-1 ring-slate-200">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-slate-900">Recent Inquiries</h2>
+                    <a href="{% url 'buyer:messages' %}" class="text-sm font-semibold text-amber-600 hover:text-amber-500">View all</a>
+                </div>
+                {% for inquiry in recent_inquiries %}
+                    <a href="{% url 'listings:detail' inquiry.listing.slug %}" class="flex items-center justify-between gap-3 rounded-2xl p-3 transition hover:bg-slate-50">
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-medium text-slate-900">{{ inquiry.listing.title }}</p>
+                            <p class="text-sm text-slate-500">{{ inquiry.created_at|date:"M d, Y" }}</p>
+                        </div>
+                        <span class="flex-shrink-0 rounded-md px-3 py-1 text-xs font-medium
+                            {% if inquiry.status == 'pending' %}bg-amber-500 text-white
+                            {% elif inquiry.status == 'responded' %}bg-emerald-500 text-white
+                            {% else %}bg-slate-400 text-white{% endif %}">
+                            {{ inquiry.get_status_display }}
+                        </span>
+                    </a>
+                {% empty %}
+                    <p class="py-6 text-center text-sm text-slate-400">No inquiries yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 </div>
 {% endblock body %}

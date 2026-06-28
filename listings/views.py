@@ -1,6 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .models import Listing
+from buyer.models import Inquiry
 
 # Create your views here.
 
@@ -24,6 +26,21 @@ def listings(request):
         return render(request, "listings/listing.html", {'listings': listings})
 
 def detail(request, slug):
-    if request.method == "GET":
-        listing = Listing.objects.get(slug=slug)
-        return render(request, "listings/detail.html", {'listing': listing})
+    listing = get_object_or_404(Listing, slug=slug)
+
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
+
+        Inquiry.objects.create(
+            buyer=request.user,
+            listing=listing,
+            name=request.POST.get('name', '').strip() or request.user.get_full_name() or request.user.email,
+            email=request.POST.get('email', '').strip() or request.user.email,
+            phone=request.POST.get('phone', '').strip(),
+            message=request.POST.get('message', '').strip(),
+        )
+        messages.success(request, "Your inquiry has been sent to the agent.")
+        return redirect('buyer:messages')
+
+    return render(request, "listings/detail.html", {'listing': listing})
