@@ -1,10 +1,216 @@
-{% extends "base.html" %}
-
-{% load static %}
+{% extends "layout.html" %}
 {% block title %}Register | NestFind{% endblock title %}
+{% load static %}
 
 {% block extra_head %}{% endblock extra_head %}
 
 {% block body %}
+<section class="min-h-screen bg-slate-100 py-12">
+    <div class="mx-auto grid min-h-screen max-w-7xl grid-cols-1 overflow-hidden rounded-[2rem] bg-white shadow-2xl lg:grid-cols-[1.3fr_0.9fr]">
+        <div class="relative h-full bg-slate-950 px-8 py-12 text-slate-100 sm:px-14 sm:py-16">
+            <div class="absolute inset-y-0 right-0 hidden w-1/3 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.18),_transparent_36%)] lg:block"></div>
+            <div class="relative max-w-lg">
+                <div class="inline-flex items-center gap-3 rounded-full bg-slate-800/70 px-4 py-2 text-sm font-semibold text-amber-300 ring-1 ring-slate-300/20">
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-300 text-slate-950">🏠</span>
+                    NestFind
+                </div>
 
+                <div class="mt-16">
+                    <div class="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-slate-800/80 text-4xl shadow-xl">
+                        🏡
+                    </div>
+                    <h1 class="mt-10 text-4xl font-semibold tracking-tight text-white sm:text-5xl">Create your account</h1>
+                    <p class="mt-5 max-w-xl text-base text-slate-300 sm:text-lg">Join NestFind to save your favourite homes, message sellers, and list your own properties in minutes.</p>
+                </div>
+
+                <div class="mt-12 grid gap-4 sm:grid-cols-3">
+                    <div class="rounded-3xl bg-slate-900/90 p-6 text-center shadow-lg ring-1 ring-white/10">
+                        <p class="text-3xl font-semibold text-white">10K+</p>
+                        <p class="mt-2 text-sm text-slate-400">Properties</p>
+                    </div>
+                    <div class="rounded-3xl bg-slate-900/90 p-6 text-center shadow-lg ring-1 ring-white/10">
+                        <p class="text-3xl font-semibold text-white">500+</p>
+                        <p class="mt-2 text-sm text-slate-400">Sellers</p>
+                    </div>
+                    <div class="rounded-3xl bg-slate-900/90 p-6 text-center shadow-lg ring-1 ring-white/10">
+                        <p class="text-3xl font-semibold text-white">98%</p>
+                        <p class="mt-2 text-sm text-slate-400">Satisfaction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-6 py-10 sm:px-10 sm:py-14">
+            <div class="rounded-[2rem] bg-slate-50 p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
+                <div class="mb-6 flex items-center gap-3 rounded-3xl bg-white p-2 shadow-sm ring-1 ring-slate-200">
+                    <button type="button" class="inline-flex flex-1 items-center justify-center rounded-3xl bg-amber-100 px-5 py-3 text-sm font-semibold text-slate-900">Create Account</button>
+                    <a href="{% url 'accounts:login' %}" class="inline-flex flex-1 items-center justify-center rounded-3xl bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Sign In</a>
+                </div>
+
+                {% if error %}
+                <div class="mb-5 rounded-2xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+                    <strong class="font-semibold">Error! </strong>{{ error }}
+                </div>
+                {% endif %}
+
+                <form action="{% url 'accounts:register' %}" method="post" class="space-y-5" id="register-form">
+                    {% csrf_token %}
+
+                    <!-- Role toggle -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">I want to</label>
+                        <input type="hidden" name="role" id="role-input" value="{{ form.role|default:'buyer' }}">
+                        <div class="mt-3 grid grid-cols-2 gap-3 rounded-3xl bg-white p-2 shadow-sm ring-1 ring-slate-200">
+                            <button type="button" data-role="buyer" class="role-btn inline-flex items-center justify-center gap-2 rounded-3xl px-5 py-3 text-sm font-semibold transition">
+                                <span>🔍</span> Buy a home
+                            </button>
+                            <button type="button" data-role="seller" class="role-btn inline-flex items-center justify-center gap-2 rounded-3xl px-5 py-3 text-sm font-semibold transition">
+                                <span>🏷️</span> Sell a home
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Common fields -->
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label for="first_name" class="block text-sm font-semibold text-slate-700">First name</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">🙍</span>
+                                <input id="first_name" name="first_name" type="text" value="{{ form.first_name|default:'' }}" placeholder="John" class="w-full border-0 bg-transparent text-slate-900 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="last_name" class="block text-sm font-semibold text-slate-700">Last name</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">🙍</span>
+                                <input id="last_name" name="last_name" type="text" value="{{ form.last_name|default:'' }}" placeholder="Doe" class="w-full border-0 bg-transparent text-slate-900 outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-slate-700">Email</label>
+                        <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                            <span class="text-slate-400">✉️</span>
+                            <input id="email" name="email" type="email" autocomplete="email" value="{{ form.email|default:'' }}" placeholder="you@example.com" class="w-full border-0 bg-transparent text-slate-900 outline-none" required>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label for="phone_number" class="block text-sm font-semibold text-slate-700">Phone</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">📞</span>
+                                <input id="phone_number" name="phone_number" type="tel" placeholder="03xx-xxxxxxx" class="w-full border-0 bg-transparent text-slate-900 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="city" class="block text-sm font-semibold text-slate-700">City</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">📍</span>
+                                <input id="city" name="city" type="text" placeholder="Karachi" class="w-full border-0 bg-transparent text-slate-900 outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buyer-specific fields -->
+                    <div id="buyer-fields" class="space-y-5 rounded-3xl bg-amber-50/60 p-5 ring-1 ring-amber-200/60">
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">Buyer preferences</p>
+                        <div>
+                            <label for="preferred_cities" class="block text-sm font-semibold text-slate-700">Preferred cities</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">🏙️</span>
+                                <input id="preferred_cities" name="preferred_cities" type="text" placeholder="Karachi, Lahore" class="w-full border-0 bg-transparent text-slate-900 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="looking_for" class="block text-sm font-semibold text-slate-700">Looking to</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">🎯</span>
+                                <select id="looking_for" name="looking_for" class="w-full border-0 bg-transparent text-slate-900 outline-none">
+                                    <option value="buy">Buy</option>
+                                    <option value="rent">Rent</option>
+                                    <option value="both">Both</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seller-specific fields -->
+                    <div id="seller-fields" class="hidden space-y-5 rounded-3xl bg-amber-50/60 p-5 ring-1 ring-amber-200/60">
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">Seller details</p>
+                        <div>
+                            <label for="company_name" class="block text-sm font-semibold text-slate-700">Company / Business name <span class="font-normal text-slate-400">(optional)</span></label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">🏢</span>
+                                <input id="company_name" name="company_name" type="text" placeholder="Nest Realty" class="w-full border-0 bg-transparent text-slate-900 outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label for="password" class="block text-sm font-semibold text-slate-700">Password</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">🔒</span>
+                                <input id="password" name="password" type="password" autocomplete="new-password" placeholder="••••••••" class="w-full border-0 bg-transparent text-slate-900 outline-none" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="confirm_password" class="block text-sm font-semibold text-slate-700">Confirm password</label>
+                            <div class="mt-3 flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-amber-300/50">
+                                <span class="text-slate-400">🔒</span>
+                                <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" placeholder="••••••••" class="w-full border-0 bg-transparent text-slate-900 outline-none" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="flex w-full items-center justify-center rounded-3xl bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-amber-400">Create Account</button>
+                </form>
+
+                <p class="mt-6 text-center text-sm text-slate-500">Already have an account?
+                    <a href="{% url 'accounts:login' %}" class="font-semibold text-slate-900 hover:underline">Sign in</a>
+                </p>
+                <p class="mt-3 text-center text-xs text-slate-500">By continuing, you agree to our Terms of Service and Privacy Policy.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleInput = document.getElementById('role-input');
+        const roleButtons = document.querySelectorAll('.role-btn');
+        const buyerFields = document.getElementById('buyer-fields');
+        const sellerFields = document.getElementById('seller-fields');
+
+        const activeClasses = ['bg-slate-950', 'text-white', 'shadow'];
+        const inactiveClasses = ['text-slate-600'];
+
+        function setRole(role) {
+            roleInput.value = role;
+
+            roleButtons.forEach(function (btn) {
+                const isActive = btn.dataset.role === role;
+                btn.classList.toggle('bg-slate-950', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('shadow', isActive);
+                btn.classList.toggle('text-slate-600', !isActive);
+            });
+
+            const isBuyer = role === 'buyer';
+            buyerFields.classList.toggle('hidden', !isBuyer);
+            sellerFields.classList.toggle('hidden', isBuyer);
+        }
+
+        roleButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                setRole(btn.dataset.role);
+            });
+        });
+
+        // Initialise from the current value (preserves choice after a failed submit)
+        setRole(roleInput.value || 'buyer');
+    });
+</script>
 {% endblock body %}
