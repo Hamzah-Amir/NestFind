@@ -22,8 +22,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
         ("buyer", "Buyer"),
-        ('agent', "Agent"),
-        ("individual_seller", "Private Seller"),
+        ("seller", "Seller"),
         ("admin", "Admin"),
     ]
 
@@ -48,13 +47,8 @@ class CustomUser(AbstractUser):
     is_phone_verified = models.BooleanField(default=False)
     is_suspended = models.BooleanField(default=False)
 
-    # Agent only fields
-    agency_name = models.CharField(max_length=255, blank=True, null=True)
-    license_number = models.CharField(max_length=100, blank=True, null=True)
-    license_document = models.FileField(upload_to='license_documents/', blank=True, null=True)
-    is_verified_agent = models.BooleanField(default=False)
-    agency_logo = models.ImageField(upload_to='agency_logos/', blank=True, null=True)
-    verified_at = models.DateTimeField(null=True, blank=True)
+    # Seller only fields
+    company_name = models.CharField(max_length=255, blank=True, null=True)
 
     # Buyer only fields
     preferred_cities = models.CharField(max_length=255, blank=True, null=True)
@@ -68,14 +62,11 @@ class CustomUser(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def is_agent(self):
-        return self.role == 'agent'
-    
     def is_buyer(self):
         return self.role == 'buyer'
-    
-    def is_individual_seller(self):
-        return self.role == 'individual_seller'
+
+    def is_seller(self):
+        return self.role == 'seller'
     
     def __str__(self):
         return f"{self.email} ({self.get_role_display()})"
