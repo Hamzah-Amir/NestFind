@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from datetime import timedelta
+from django.utils import timezone
+from django.db.models import F
 from django.contrib import messages
-from .models import Listing
+from .models import Listing, ListingView
 from buyer.models import Inquiry
-
 # Create your views here.
 
 def listings(request):
@@ -41,6 +43,25 @@ def detail(request, slug):
             message=request.POST.get('message', '').strip(),
         )
         messages.success(request, "Your inquiry has been sent to the agent.")
-        return redirect('buyer:messages')
+        return redirect('listings:detail', slug=listing.slug)
+
+    if request.user != listing.agent:
+        if request.user.is_authenticated:
+            identify = {"user": request.user}
+        else:
+            if not request.session.session_key:
+                request.session.create()          # anonymous users need a key first
+        identity = {'session_key': request.session.session_key}
+
+        already = ListingView.objects.filter(
+        listing=listing,
+        viewed_at__gte=timezone.now() - timedelta(hours=24),
+        **identity,
+    ).exists()
+
+        if not already:
+            ListingView.objects.create(listing=listing, **identity)
+            Listing.objects.filter(pk=listing.pk).update(views_count=F('views_count') + 1)
+        
 
     return render(request, "listings/detail.html", {'listing': listing})

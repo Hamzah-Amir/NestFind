@@ -114,3 +114,11 @@ class ListingImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.listing.title}"
+
+class ListingView(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='view_records')
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+    session_key = models.CharField(max_length=40, blank=True)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        indexes = [models.Index(fields=['listing', 'viewed_at'])]
