@@ -26,6 +26,7 @@ urlpatterns = [
     path("listings/", include("listings.urls")),
     path("pages/", include("pages.urls")),
     path('buyer/', include("buyer.urls")),
+    path('seller/', include('seller.urls')),
     path('__reload__/', include('django_browser_reload.urls')),
 ]
 
