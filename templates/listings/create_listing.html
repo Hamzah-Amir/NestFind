@@ -1,0 +1,329 @@
+{% extends "layout.html" %}
+{% block title %}Create Listing{% endblock title %}
+
+{% block body %}
+<div class='flex min-h-screen items-stretch'>
+
+    {% include "seller/components/sidebar.html" %}
+
+    <section class="head flex-1 p-8 bg-[#FAF7F2]">
+        <p><a href="{% url "seller:dashboard" %}">Dashboard</a> → My Listings → Add New</p>
+        <h1 class='text-3xl text-slate-900 font-semibold'>Add New Listing</h1>
+
+        <div class='mt-8 flex items-start w-2/3'>
+            <div class='flex flex-col items-center'>
+                <div data-dot="1" class='step-dot is-active flex h-10 w-10 items-center justify-center rounded-full border-2 font-medium'>1</div>
+                <span class='mt-2 text-sm text-slate-600'>Basic Info</span>
+            </div>
+            <div data-line="1" class='step-line mt-5 h-0.5 flex-1'></div>
+            <div class='flex flex-col items-center'>
+                <div data-dot="2" class='step-dot flex h-10 w-10 items-center justify-center rounded-full border-2 font-medium'>2</div>
+                <span class='mt-2 text-sm text-slate-600'>Details &amp; Media</span>
+            </div>
+            <div data-line="2" class='step-line mt-5 h-0.5 flex-1'></div>
+            <div class='flex flex-col items-center'>
+                <div data-dot="3" class='step-dot flex h-10 w-10 items-center justify-center rounded-full border-2 font-medium'>3</div>
+                <span class='mt-2 text-sm text-slate-600'>Review &amp; Publish</span>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" id='listing-form' class='bg-white w-2/3 mt-8 px-12 py-6 rounded-2xl'>
+            {% csrf_token %}
+
+            <input type="hidden" name="status" value="pending">
+
+            <div data-step="1">
+                <h2 class='text-xl mb-4'>Basic Information</h2>
+                <div class='text-slate-900 flex flex-col gap-4'>
+                    <label for="title">Listing Title</label>
+                        <input type="text" name="title" required id="title" placeholder='e.g 3 Bedroom House in DHA Phase 6, Karachi' class='bg-[#FAF7F2] focus:border-slate-900 p-4 rounded-xl'>
+                </div>
+
+                <div class='text-slate-900 mt-6'>
+                    <p class='mb-2'>Listing Type</p>
+                    <div class='flex gap-3'>
+                        <label class='cursor-pointer'>
+                            <input type="radio" name="listing_type" value="for_sale" class='peer sr-only' checked>
+                            <span class='block rounded-xl bg-[#F5EFE6] px-8 py-3 font-medium text-slate-700 transition peer-checked:bg-[#1B2B4B] peer-checked:text-white'>
+                                For Sale
+                            </span>
+                        </label>
+
+                        <label class='cursor-pointer'>
+                            <input type="radio" name="listing_type" value="for_rent" class='peer sr-only'>
+                            <span class='block rounded-xl bg-[#F5EFE6] px-8 py-3 font-medium text-slate-700 transition peer-checked:bg-[#1B2B4B] peer-checked:text-white'>
+                                For Rent
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class='mt-6 grid grid-cols-2 gap-x-8 gap-y-6 text-slate-900'>
+                    <div class='flex flex-col gap-2'>
+                        <label for="property_type">Property Type</label>
+                        <select name="property_type" id="property_type" required class='bg-[#F5EFE6] p-4 rounded-xl'>
+                            <option value="">Select type</option>
+                            <option value="house">House</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="flat">Flat</option>
+                            <option value="villa">Villa</option>
+                            <option value="plot">Plot</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="price">Price (PKR)</label>
+                        <input type="number" name="price" id="price" required min="0" step="1" placeholder='e.g. 25000000' class='bg-[#F5EFE6] p-4 rounded-xl'>
+                    </div>
+
+                    <div class='col-span-2 flex items-center gap-2'>
+                        <input type="checkbox" name="price_negotiable" id="price_negotiable" class='h-4 w-4 accent-[#1B2B4B]'>
+                        <label for="price_negotiable">Price is negotiable</label>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="city">City</label>
+                        <select name="city" id="city" required class='bg-[#F5EFE6] p-4 rounded-xl'>
+                            <option value="">Select city</option>
+                            <option value="Karachi">Karachi</option>
+                            <option value="Lahore">Lahore</option>
+                            <option value="Islamabad">Islamabad</option>
+                            <option value="Rawalpindi">Rawalpindi</option>
+                            <option value="Faisalabad">Faisalabad</option>
+                            <option value="Multan">Multan</option>
+                            <option value="Peshawar">Peshawar</option>
+                            <option value="Quetta">Quetta</option>
+                        </select>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="area">Area / Locality</label>
+                        <input type="text" name="area" id="area" required placeholder='e.g. DHA Phase 6, Gulshan-e-Iqbal' class='bg-[#F5EFE6] p-4 rounded-xl'>
+                    </div>
+
+                    <div class='col-span-2 flex flex-col gap-2'>
+                        <label for="address">Full Address</label>
+                        <textarea name="address" id="address" rows="4" required placeholder='Street, block, sector…' class='bg-[#F5EFE6] p-4 rounded-xl resize-y'></textarea>
+                    </div>
+                </div>
+
+                <div class='mt-8 flex justify-end'>
+                    <button type="button" data-next class='rounded-xl bg-[#1B2B4B] px-8 py-4 font-medium text-white transition hover:opacity-90'>
+                        Next: Details &amp; Media →
+                    </button>
+                </div>
+            </div>
+
+            <div data-step="2" style='display:none'>
+                <h2 class='text-xl mb-4'>Details &amp; Media</h2>
+
+                <div class='grid grid-cols-2 gap-x-8 gap-y-6 text-slate-900'>
+                    <div class='flex flex-col gap-2'>
+                        <label for="bedrooms">Bedrooms</label>
+                        <input type="number" name="bedrooms" id="bedrooms" min="0" placeholder='e.g. 3' class='bg-[#F5EFE6] p-4 rounded-xl'>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="bathrooms">Bathrooms</label>
+                        <input type="number" name="bathrooms" id="bathrooms" min="0" placeholder='e.g. 2' class='bg-[#F5EFE6] p-4 rounded-xl'>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="area_size">Area Size</label>
+                        <input type="number" name="area_size" id="area_size" required min="0" step="0.01" placeholder='e.g. 10' class='bg-[#F5EFE6] p-4 rounded-xl'>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="area_unit">Unit</label>
+                        <select name="area_unit" id="area_unit" required class='bg-[#F5EFE6] p-4 rounded-xl'>
+                            <option value="marla">Marla</option>
+                            <option value="kanal">Kanal</option>
+                            <option value="sqft">Square Feet</option>
+                            <option value="sqyd">Square Yard</option>
+                        </select>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="floor_number">Floor Number</label>
+                        <input type="number" name="floor_number" id="floor_number" min="0" placeholder='e.g. 2' class='bg-[#F5EFE6] p-4 rounded-xl'>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="furnishing_status">Furnishing</label>
+                        <select name="furnishing_status" id="furnishing_status" class='bg-[#F5EFE6] p-4 rounded-xl'>
+                            <option value="unfurnished">Unfurnished</option>
+                            <option value="semi_furnished">Semi Furnished</option>
+                            <option value="furnished">Furnished</option>
+                            <option value="not_applicable">Not Applicable</option>
+                        </select>
+                    </div>
+
+                    <div class='flex flex-col gap-2'>
+                        <label for="noc_status">NOC Status</label>
+                        <select name="noc_status" id="noc_status" class='bg-[#F5EFE6] p-4 rounded-xl'>
+                            <option value="not_applicable">Not Applicable</option>
+                            <option value="available">Available</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class='mt-6 flex flex-col gap-2 text-slate-900'>
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" rows="6" required placeholder='Describe the property, its condition, nearby landmarks…' class='bg-[#F5EFE6] p-4 rounded-xl resize-y'></textarea>
+                    <p class='self-end text-sm text-slate-500'><span id='desc-count'>0</span> characters</p>
+                </div>
+
+                <div class='mt-8 text-slate-900'>
+                    <p class='mb-3'>Photos</p>
+                    <label for="images" class='flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 py-12 transition hover:border-[#C9A96E]'>
+                        <svg class='h-10 w-10 text-[#1B2B4B]' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 16V4" /><path d="m7 9 5-5 5 5" /><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
+                        </svg>
+                        <span class='mt-3 font-medium text-[#1B2B4B]'>Upload up to 15 photos</span>
+                        <span class='mt-1 text-sm text-slate-500'>First photo will be the cover. JPG/PNG, max 5MB</span>
+                        <input type="file" name="images" id="images" multiple accept="image/jpeg,image/png" class='sr-only'>
+                    </label>
+                    <p id='file-count' class='mt-2 text-sm text-slate-500'></p>
+                </div>
+
+                <div class='mt-8 flex items-center justify-between rounded-2xl bg-[#FAF7F2] p-6'>
+                    <div>
+                        <p class='font-medium text-slate-900'>Make this a Featured Listing</p>
+                        <p class='mt-1 text-sm text-slate-500'>PKR 2,000/month — appear at top of search results</p>
+                    </div>
+                    <label class='cursor-pointer'>
+                        <input type="checkbox" name="is_featured" class='peer sr-only'>
+                        <span class='relative block h-7 w-12 rounded-full bg-slate-300 transition peer-checked:bg-[#1B2B4B]
+                                     after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:left-6'></span>
+                    </label>
+                </div>
+
+                <div class='mt-8 flex justify-between gap-4'>
+                    <button type="button" data-back class='rounded-xl border border-slate-300 px-8 py-4 font-medium text-slate-700 transition hover:bg-slate-50'>
+                        ← Back
+                    </button>
+                    <button type="button" data-next class='rounded-xl bg-[#1B2B4B] px-8 py-4 font-medium text-white transition hover:opacity-90'>
+                        Next: Review &amp; Publish →
+                    </button>
+                </div>
+            </div>
+
+
+            {% comment %} {# ==========================================================
+               STEP 3 — REVIEW & PUBLISH  (new)
+               Summary rows are filled by JS from the fields above.
+               No "Save as Draft" button, per your note.
+               ========================================================== #} {% endcomment %}
+            <div data-step="3" style='display:none'>
+                <h2 class='text-xl mb-4'>Review &amp; Publish</h2>
+
+                <ul class='space-y-4'>
+                    <li class='flex items-center gap-3'>
+                        <span data-check='title' class='h-4 w-4 rounded-full bg-[#F5EFE6]'></span>
+                        <span class='text-slate-700'>Title</span>
+                        <span data-review='title' class='ml-auto text-sm text-slate-500'></span>
+                    </li>
+                    <li class='flex items-center gap-3'>
+                        <span data-check='price' class='h-4 w-4 rounded-full bg-[#F5EFE6]'></span>
+                        <span class='text-slate-700'>Price</span>
+                        <span data-review='price' class='ml-auto text-sm text-slate-500'></span>
+                    </li>
+                    <li class='flex items-center gap-3'>
+                        <span data-check='location' class='h-4 w-4 rounded-full bg-[#F5EFE6]'></span>
+                        <span class='text-slate-700'>Location</span>
+                        <span data-review='location' class='ml-auto text-sm text-slate-500'></span>
+                    </li>
+                    <li class='flex items-center gap-3'>
+                        <span data-check='description' class='h-4 w-4 rounded-full bg-[#F5EFE6]'></span>
+                        <span class='text-slate-700'>Description</span>
+                        <span data-review='description' class='ml-auto text-sm text-slate-500'></span>
+                    </li>
+                </ul>
+
+                <div class='mt-8 rounded-2xl bg-[#F5EFE6] p-8 text-center'>
+                    <p class='text-lg font-medium text-slate-900'>Ready to publish?</p>
+                    <p class='mt-1 text-sm text-slate-500'>Your listing will go live after verification (within 24 hours)</p>
+                </div>
+
+                <div class='mt-8 flex gap-4'>
+                    <button type="button" data-back class='flex-1 rounded-xl border border-slate-300 px-8 py-4 font-medium text-slate-700 transition hover:bg-slate-50'>
+                        ← Back
+                    </button>
+                    <button type="submit" class='flex-1 rounded-xl bg-[#1B2B4B] px-8 py-4 font-medium text-white transition hover:opacity-90'>
+                        Publish Listing
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </section>
+</div>
+
+{# NEW — step indicator colors #}
+<style>
+    .step-dot { border-color: #CBD5E1; color: #94A3B8; background: #fff; }
+    .step-dot.is-active { border-color: #1B2B4B; background: #1B2B4B; color: #fff; }
+    .step-line { background: #CBD5E1; }
+    .step-line.is-active { background: #1B2B4B; }
+</style>
+
+{% comment %} {# NEW — step switching. It stays ONE <form> with ONE POST at the end,
+   so your view still receives every field from all three steps together. #} {% endcomment %}
+<script>
+(function () {
+    const form  = document.getElementById('listing-form');
+    const steps = form.querySelectorAll('[data-step]');
+    let current = 1;
+
+    function show(n) {
+        steps.forEach(s => s.style.display = (s.dataset.step == n) ? 'block' : 'none');
+        document.querySelectorAll('[data-dot]').forEach(d =>
+            d.classList.toggle('is-active', Number(d.dataset.dot) <= n));
+        document.querySelectorAll('[data-line]').forEach(l =>
+            l.classList.toggle('is-active', Number(l.dataset.line) < n));
+        current = n;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Next: only advance if this step's fields pass browser validation
+    form.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
+        const fields = steps[current - 1].querySelectorAll('input, select, textarea');
+        for (const f of fields) {
+            if (!f.checkValidity()) { f.reportValidity(); return; }
+        }
+        if (current === 2) fillReview();
+        show(current + 1);
+    }));
+
+    form.querySelectorAll('[data-back]').forEach(btn =>
+        btn.addEventListener('click', () => show(current - 1)));
+
+    const desc = document.getElementById('description');
+    desc.addEventListener('input', () => {
+        document.getElementById('desc-count').textContent = desc.value.length;
+    });
+
+    const images = document.getElementById('images');
+    images.addEventListener('change', () => {
+        const n = images.files.length;
+        document.getElementById('file-count').textContent = n ? n + ' photo(s) selected' : '';
+    });
+
+    function fillReview() {
+        const val = {
+            title: form.title.value,
+            price: form.price.value ? 'PKR ' + Number(form.price.value).toLocaleString() : '',
+            location: [form.area.value, form.city.value].filter(Boolean).join(', '),
+            description: desc.value ? desc.value.slice(0, 40) + '…' : ''
+        };
+        for (const key in val) {
+            document.querySelector('[data-review="' + key + '"]').textContent = val[key];
+            document.querySelector('[data-check="' + key + '"]')
+                    .style.background = val[key] ? '#10B981' : '#F5EFE6';
+        }
+    }
+})();
+</script>
+{% endblock body %}
