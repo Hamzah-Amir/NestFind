@@ -12,7 +12,7 @@
         <p class="mt-1 text-sm text-slate-500">Welcome back, {{ request.user.get_full_name|default:request.user.email }}</p>
 
         <div class='mt-6'>
-            <a href='{% url "buyer:dashboard" %}' class='p-3 px-6 border border-orange-400 rounded-xl bg-orange-400 cursor-pointer'>New Listing</a>
+            <a href='{% url "seller:create_listing" %}' class='p-3 px-6 border border-orange-400 rounded-xl bg-orange-400 cursor-pointer'>New Listing</a>
         </div>
             
         <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
