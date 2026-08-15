@@ -71,6 +71,21 @@ def create_listings(request):
             )
         for image in images:
             ListingImage.objects.create(listing=listing, image=image)
-            
+
         return redirect("seller:dashboard")
     return render(request, 'listings/create_listing.html')
+
+@login_required(login_url='accounts:login')
+def my_listings(request):
+    listings = Listing.objects.filter(agent=request.user)
+    context : dict = {"listings": listings}
+    return render(request, 'seller/my_listings.html', context)
+
+def delete_listings(request, slug):
+    pass
+
+def inquiry(request):
+    pass
+
+def settings(request):
+    pass
